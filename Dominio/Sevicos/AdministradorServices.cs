@@ -13,10 +13,33 @@ namespace minimal_api.Dominio.Sevicos
             _dbContexto = dbContexto;
         }
 
-        public Administrador? login(LoginDTO loginDTO)
+        public Administrador? BuscaPorId(int id)
+        {
+            return _dbContexto.Administradores.Where(v => v.Id == id).FirstOrDefault();
+        }
+
+        public Administrador Incluir(Administrador administrador)
+        {
+            _dbContexto.Administradores.Add(administrador);
+            _dbContexto.SaveChanges();
+            return administrador;
+        }
+
+        public Administrador? Login(LoginDTO loginDTO)
         {
             var adm = _dbContexto.Administradores.Where(a => a.Email == loginDTO.Email && a.Senha == loginDTO.Senha).FirstOrDefault();
             return adm;
+        }
+
+        public List<Administrador> Todos(int? pagina)
+        {
+            var querry = _dbContexto.Administradores.AsQueryable();
+            int itensPorPagina = 10;
+            if (pagina != null)
+            {
+                querry = querry.Skip(((int)pagina - 1) * itensPorPagina).Take(itensPorPagina);
+            }
+            return querry.ToList();
         }
     }
 }

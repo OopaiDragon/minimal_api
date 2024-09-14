@@ -38,7 +38,7 @@ namespace minimal_api.Dominio.Sevicos
             _dbContexto.SaveChanges();
         }
 
-        public List<Veiculo> Todos(int pagina = 1, string? nome = null, string? marca = null)
+        public List<Veiculo> Todos(int? pagina = 1, string? nome = null, string? marca = null)
         {
             int tamanhoPagina = 10;
             var query = _dbContexto.Veiculos.AsQueryable();
@@ -50,9 +50,13 @@ namespace minimal_api.Dominio.Sevicos
             {
                 query = query.Where(v => v.Marca.Contains(marca));
             }
-            query = query
-                .Skip((pagina - 1) * tamanhoPagina)
+            if (pagina != null)
+            {
+                query = query
+                .Skip(((int)pagina - 1) * tamanhoPagina)
                 .Take(tamanhoPagina);
+            }
+
             return [.. query];
         }
     }
