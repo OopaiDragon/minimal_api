@@ -6,9 +6,7 @@ namespace minimal_api.Infraestrutura.Db
     public class DbContexto : DbContext
     {
         private readonly IConfiguration _configuracaoAppSettings;
-
-        public DbContexto(DbContextOptions<DbContexto> options, IConfiguration configuracaoAppSettings)
-            : base(options)
+        public DbContexto(IConfiguration configuracaoAppSettings)
         {
             _configuracaoAppSettings = configuracaoAppSettings;
         }
